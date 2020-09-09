@@ -3,10 +3,7 @@
  * @date 2020/4/25 20:08
  */
 import javax.sound.midi.SoundbankResource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -112,15 +109,47 @@ public class Main {
         return ans;
     }
     public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        int n = sc.nextInt();
-//        int k = sc.nextInt();
-//        int[] tower = new int[n];
-//        for (int i = 0; i < n; i++) {
-//            tower[i] = sc.nextInt();
-//        }
-        Main m = new Main();
-        int [] a = new int[]{1,2,2,2,2,2,3,3,3,4};
-        m.GetNumberOfK(a,4);
+        Scanner sc = new Scanner(System.in);
+        char[][] map = new char[6][6];
+        for(int i =0;i<6;i++){
+            map[i] = sc.next().toCharArray();
+        }
+        int[][] visited = new int[6][6];
+        Arrays.fill(visited,1);
+        ArrayList<Integer> ans = new ArrayList<>();
+        int k =0;
+        for(int i = 0;i<6;i++){
+            for(int j =0;j<6;j++){
+                if(map[i][j]!='*'){
+                    visited[i][j] = dfs(map,visited,i,j);
+                }
+            }
+        }
+        int ret = 1;
+
+        for(int i =0;i<6;i++){
+            for(int j = 0;j<6;j++){
+                ret *= visited[i][j];
+            }
+        }
+        System.out.println(ret);
+    }
+    private static int dfs(char[][] map, int[][] visited,int i,int j){
+        if(i>=map.length || i<0 || j>=map[0].length || j<0) return 1;
+        if(map[i][j] !='*' && visited[i][j] ==0 ) {
+            visited[i][j] = 1;
+            help(visited,i+1,j);
+            help(visited,i-1,j);
+            help(visited,i,j+1);
+            help(visited,i,j-1);
+            return 1;
+        }
+        int ans = dfs(map,visited,i+1,j)+ dfs(map,visited,i-1,j)+ dfs(map,visited,i,j+1)+
+        dfs(map,visited,i,j-1);
+        return ans;
+    }
+    private static void help(int[][] visited,int i ,int j){
+//        if(i>=visited.length || i<0 || j>=visited[0].length || j<0 ) return;
+        visited[i][j] = 1;
     }
 }
